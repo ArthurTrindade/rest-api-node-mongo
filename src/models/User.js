@@ -21,4 +21,8 @@ const schema = new Schema({
 
 });
 
+function passwordIsValid(password){
+  return bcryptjs.compare(password, this.password_hash);
+}
+
 export default Mongoose.model('User', schema);

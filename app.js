@@ -23,7 +23,6 @@ class App {
     this.app.use('/alunos/', alunosRoute);
     this.app.use('/users/', userRoute);
     this.app.use('/tokens/', tokenRoute);
-
   }
 
 }
