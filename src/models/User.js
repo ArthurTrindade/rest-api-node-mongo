@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt';
+
 import Mongoose from 'mongoose';
 const { Schema } = Mongoose;
 
@@ -17,12 +19,21 @@ const schema = new Schema({
   password: {
     type: String,
     required: true
-  }
+  },
+
+  createAt: {
+    type: Date,
+    default: Date.now,
+  },
 
 });
 
-function passwordIsValid(password){
-  return bcryptjs.compare(password, this.password_hash);
-}
+schema.pre('save', async function (next) {
+  const hash = await bcrypt.hash(this.password, 10);
+  this.password = hash;
+
+  next();
+});
+
 
 export default Mongoose.model('User', schema);

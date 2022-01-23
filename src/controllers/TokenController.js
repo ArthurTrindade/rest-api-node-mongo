@@ -13,14 +13,15 @@ class Token {
       })
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, password });
 
     if(!user) {
       return res.status(401).json({
-        error: ['Usuário não existe']
+        error: ['Usuário não existe ou senha incorreta']
       });
 
     }
+
     const { id } = user;
     const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET, {
       expiresIn: process.env.TOKEN_EXPIRATION
