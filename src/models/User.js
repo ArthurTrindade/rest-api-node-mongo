@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import Mongoose from 'mongoose';
 const { Schema } = Mongoose;
@@ -18,7 +19,8 @@ const schema = new Schema({
 
   password: {
     type: String,
-    required: true
+    required: true,
+    select: false
   },
 
   createAt: {
@@ -34,6 +36,7 @@ schema.pre('save', async function (next) {
 
   next();
 });
+
 
 
 export default Mongoose.model('User', schema);

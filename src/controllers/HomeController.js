@@ -1,10 +1,7 @@
 class Home {
 
   index(req, res) {
-    res.status(200).send({
-      title: 'Node Stores API',
-      version: '0.0.1'
-    })
+    res.status(200).send({ok: true, user: req.userId })
   }
 
   create(req, res, next) {

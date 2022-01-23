@@ -10,24 +10,27 @@ export default (req, res, next) => {
     })
   }
 
-  const [, token] = authorization.split(' ');
+  const parts = authorization.split(' ');
 
-  try {
+  if(!parts.length === 2)
+    return res.status(401).send({ error: 'Token error' });
 
-    const dados = jwt.verify(token, process.env.TOKEN_SECRET);
 
-    const { id, email } = dados;
+  const [ scheme, token ] = parts;
 
-    req.userId = id;
-    req.userEmail = email;
+  if (scheme !== 'Bearer') {
+    return res.status(401).send({ error: 'Token malformated' });
+  }
+
+  jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+    if (err) return res.status(401).send({ error: 'Token inválido'})
+
+    req.userId = decoded.id;
 
     return next();
 
-  } catch(e) {
+  })
 
-    return res.status(401).json({
-      error: ['Token expirado ou invalido']
-    })
-  }
+
 
 };

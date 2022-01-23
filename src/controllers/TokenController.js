@@ -1,6 +1,6 @@
-import User from "../models/User"
+import User, { generateToken } from "../models/User"
 import jwt from 'jsonwebtoken';
-
+import bcrypt from 'bcrypt';
 class Token {
 
   async create(req, res) {
@@ -13,21 +13,24 @@ class Token {
       })
     }
 
-    const user = await User.findOne({ email, password });
+    const user = await User.findOne({ email }).select('+password');
 
     if(!user) {
-      return res.status(401).json({
-        error: ['Usuário não existe ou senha incorreta']
+      return res.status(400).json({
+        error: ['Usuário não existe']
       });
-
     }
 
-    const { id } = user;
-    const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET, {
-      expiresIn: process.env.TOKEN_EXPIRATION
+    if(!await bcrypt.compare(password, user.password))
+      return res.status(400).json({ error: 'Senha inválida' })
+
+    user.password = undefined;
+
+    const token = jwt.sign({ id: user.id }, process.env.TOKEN_SECRET, {
+      expiresIn: 86400,
     });
 
-    return res.json({ token });
+    return res.status(200).send({ user, token });
 
   }
 
