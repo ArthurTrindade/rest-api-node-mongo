@@ -33,8 +33,9 @@ class User {
   async index(req, res) {
     try {
       const users = await Users.find({}, 'id nome email');
-      console.log(req.userId);
+
       return res.json(users);
+
     } catch (e) {
       return res.status(400).json({
         message: "Erro para carregar usuarios",
