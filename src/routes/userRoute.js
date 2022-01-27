@@ -7,10 +7,10 @@ const router = new Router();
 
 // Na nossa aplicação essas rotas não tem que existir para um usuário
 router.get('/', loginRequired, userController.index);
-router.get('/', userController.show);
+router.get('/:id', userController.show);
 
 router.post('/', userController.create);
-router.put('/', loginRequired, userController.update);
+router.put('/:id', loginRequired, userController.update);
 router.delete('/', loginRequired, userController.delete);
 
 export default router;

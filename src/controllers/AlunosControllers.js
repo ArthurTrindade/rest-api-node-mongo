@@ -20,6 +20,15 @@ class Aluno {
 
   async index(req, res, next) {
 
+
+    try {
+      const alunos = Alunos.find({}, 'nome sobrenome')
+
+      return res.status(200).json(alunos);
+    } catch(e) {
+
+    }
+
     await Alunos.find({}, 'nome sobrenome').then(data => {
       res.status(200).send(data);
 
@@ -29,6 +38,16 @@ class Aluno {
 
   }
 
+  async show(req, res, next) {
+
+  }
+
+  async delete(req, res, next) {
+
+
+
+
+  }
 
 
 }
